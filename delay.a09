@@ -1,0 +1,42 @@
+; Cycles Per Millisecond - User Supplied
+;
+CPMS    EQU     2000        ; 1000 = 1 MHz Clock
+                            ; 2000 = 2 MHz Clock
+
+MFAC    EQU     CPMS/20     ; Multiply factor for all
+                            ; except last millisecond
+
+MFACM   EQU     MFAC-4      ; Multiplying factor for last
+                            ; millisecond
+
+DELAY:
+
+        ; Do all but the last millisecond
+        ;
+        PSHS    D,X         ; save registers to stack
+        LDB     #MFAC       ; Get multiplying factor
+        DECA                ; Reduce number of ms by 1
+        MUL                 ; Multiply factor times ms
+        TFR     D,Y         ; Transfer loop count to X
+        JSR     DLY
+        
+        ; Account for 80 ms overhead delay by reducing last ms's count
+        ;
+        LDX     #MFAC       ; Get reduced count
+        JSR     DLY         ; Delay last millisecond
+        PULS    D,X         ; Restore registers
+        RTS
+        ;
+        ; ROUTINE:          DLY
+        ; PURPOSE:          DELAY ROUTING
+        ; ENTRY:            REGISTER X = COUNT
+        ; EXIT:             REGISTER X = 0
+        ; REGISETERS USED:  X
+        LDX     #MFAC
+DLY:    BRA     DLY1
+DLY1:   BRA     DLY2
+DLY2:   BRA     DLY3
+DLY3:   BRA     DLY4
+DLY4:   LEAX    -1,X
+        BNE     DLY
+        RTS

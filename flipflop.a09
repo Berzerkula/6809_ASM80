@@ -1,0 +1,48 @@
+; KILO ROM Module
+; Needs these instructions on the begin:
+            .CSEG   
+            ALIGN   256 
+            JMP     flipflop ; Jump to the begin
+
+; Needed signature: MOD9 + module name + trailing zero
+            .CSTR   "MOD9FlipFlop" 
+
+; Monitor vectors:
+;MRESET      EQU     $E000 
+;MSERIN      EQU     $E003 
+;MSEROUT     EQU     $E006 
+;MPRINT2     EQU     $E009 
+;MPRINTX     EQU     $E00C 
+;MPRIMM      EQU     $E00F 
+
+; here are your space:
+FLIPFLOP:            
+            JSR     MPRIMM 
+            .CSTR   "Flip Flop",$0d,$0a 
+            
+; It just set some bits up and some down
+
+            JMP     flip
+
+; Set bit pattern
+FLIP:
+            LDA     #$AA
+            STA     PORTA 
+            STA     PORTB
+            JSR     qtrscd
+            JMP     flop
+
+FLOP:
+            LDA     #$55
+            STA     PORTA 
+            STA     PORTB
+            JSR     qtrscd
+            JMP     flip
+
+QTRSCD:     LDA     #250		; 250 MILLISECONDS (FA HEX)
+            JSR     DELAY
+            DECB
+            BNE     QTRSCD		; CONTINUE UNTIL DONE
+            RTS
+
+            .INCLUDE delay.a09
