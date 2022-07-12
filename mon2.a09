@@ -76,9 +76,9 @@ MPRIMM      EQU     $E00F
 RESET:              
             LDS     #$8000 
             ORCC    #$50 
-            LDA     #$03
-            
+
             ; serial
+            LDA     #$03 
             STA     ACIAC
             LDA     #$15 
             STA     ACIAC
