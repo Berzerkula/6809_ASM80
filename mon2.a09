@@ -41,20 +41,6 @@ Q_SUBR:     DS      2
 
 	     .INCLUDE pia.a09
 
-; Vector table
-; E000 - reset
-; E003 - read a character from the serial port
-; E006 - print a character
-; E009 - print 2digit hex number from A
-; E00C - print 4digit hex number from X
-; E00F - print immediatelly stored ASCIIZ string
-MRESET      EQU     $E000 
-MSERIN      EQU     $E003 
-MSEROUT     EQU     $E006 
-MPRINT2     EQU     $E009 
-MPRINTX     EQU     $E00C 
-MPRIMM      EQU     $E00F
-
             JMP     reset 
             JMP     serin 
             JMP     serout 
