@@ -29,29 +29,17 @@ Q_SUBR:     DS      2
 
             .CSEG   
 
+	    .INCLUDE vectors.a09
+
 ; for generating EEPROM image, use this:
 .org $0000
 .phase $E000
 ;            .ORG    $E000 
 ;            .ENT    $ 
 
-; serial
-ACIA        EQU     $83fe 
-ACIAC       EQU     ACIA 
-ACIAS       EQU     ACIA 
-ACIAD       EQU     ACIA+1 
-ACIA_TDRE   EQU     02h 
-ACIA_RDRF   EQU     01h
+	     .INCLUDE acia.a09
 
-; pia
-PIA         EQU     $9000 
-;Common PIA addresses - using the highest possible
-PORTA       EQU     PIA+$3fc 
-DDRA        EQU     PORTA 
-CRA         EQU     PIA+$3fd 
-PORTB       EQU     PIA+$3fe 
-DDRB        EQU     PORTB 
-CRB         EQU     PIA+$3ff
+	     .INCLUDE pia.a09
 
 ; Vector table
 ; E000 - reset

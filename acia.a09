@@ -1,0 +1,7 @@
+; serial
+ACIA        EQU     $83fe 
+ACIAC       EQU     ACIA 
+ACIAS       EQU     ACIA 
+ACIAD       EQU     ACIA+1 
+ACIA_TDRE   EQU     02h 
+ACIA_RDRF   EQU     01h

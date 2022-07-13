@@ -1,47 +1,9 @@
-; OMEN PIA test
-; 6809 source (OMEN Kilo)
-
-; It just set some bits up and some down
-
-; PIA is connected IO3
+; pia
 PIA         EQU     $9000 
-
 ;Common PIA addresses - using the highest possible
 PORTA       EQU     PIA+$3fc 
 DDRA        EQU     PORTA 
 CRA         EQU     PIA+$3fd 
 PORTB       EQU     PIA+$3fe 
 DDRB        EQU     PORTB 
-CRB         EQU     PIA+$3ff 
-
-            .ORG    $200 
-            .ENT    $ 
-
-            JMP     flip
-
-; Set bit pattern
-FLIP:
-            LDA     #$AA
-            STA     PORTA 
-            STA     PORTB
-            JSR     qtrscd
-            JMP     flop
-
-FLOP:
-            LDA     #$55
-            STA     PORTA 
-            STA     PORTB
-            JSR     qtrscd
-            JMP     flip
-
-QTRSCD:     LDA	#250		; 250 MILLISECONDS (FA HEX)
-            JSR	DELAY
-            DECB
-            BNE	QTRSCD		; CONTINUE UNTIL DONE
-            RTS
-
-            .INCLUDE delay.a09
-
-; and done
-DONE:
-            JMP     $E000 
+CRB         EQU     PIA+$3ff
