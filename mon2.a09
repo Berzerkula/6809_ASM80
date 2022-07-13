@@ -591,7 +591,7 @@ MON_END     EQU     $
 
             .INCLUDE basic.a09
             
-            .INCLUDE flipflop.a09
+            .INCLUDE flipflopmod.a09
             
             .INCLUDE testmod.a09
 
