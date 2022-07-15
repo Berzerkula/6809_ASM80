@@ -5,7 +5,8 @@
             JMP     flipflop ; Jump to the begin
 
 ; Needed signature: MOD9 + module name + trailing zero
-            .CSTR   "MOD9FlipFlop" 
+            .CSTR   "MOD9FlipFlop"
+            JMP     start
 
 ; Monitor vectors:
 ;MRESET      EQU     $E000 
@@ -15,10 +16,22 @@
 ;MPRINTX     EQU     $E00C 
 ;MPRIMM      EQU     $E00F 
 
+START:
+            ; reset pia
+            LDA     #$00 ; no interrupts, access DDR
+            STA     CRA 
+            STA     CRB 
+            LDA     #$FF ; all outputs
+            STA     DDRA 
+            STA     DDRB 
+            LDA     #$04 ; access PORT
+            STA     CRA 
+            STA     CRB
+
 ; here are your space:
 FLIPFLOP:            
             JSR     MPRIMM 
-            .CSTR   "Flip Flop",$0d,$0a 
+            .CSTR   "Flip Flop (ESC to exit)",$0d,$0a 
             
 ; It just set some bits up and some down
 
@@ -37,7 +50,17 @@ FLOP:
             STA     PORTA 
             STA     PORTB
             JSR     qtrscd
-            JMP     flip
+            JMP     esc
+
+; Check if ESC is pressed to determine if to exit module
+ESC:
+            LDA     ACIAS 
+            ANDA    #ACIA_RDRF 
+            BEQ     flip
+            LDA     ACIAD 
+            CMPA    #$1B
+            BNE     flip
+            JMP     MRESET
 
 QTRSCD:     LDA     #250		; 250 MILLISECONDS (FA HEX)
             JSR     DELAY
