@@ -4,7 +4,9 @@
 ; It just set some bits up and some down
 
 	    .INCLUDE pia.a09
-
+	    .INCLUDE acia.a09
+	    .INCLUDE leds.a09
+	    
             .ORG    $200 
             .ENT    $ 
 
@@ -15,6 +17,7 @@ FLIP:
             LDA     #$AA
             STA     PORTA 
             STA     PORTB
+            STA     leds
             JSR     qtrscd
             JMP     flop
 
@@ -22,8 +25,15 @@ FLOP:
             LDA     #$55
             STA     PORTA 
             STA     PORTB
+            STA     leds
             JSR     qtrscd
-            JMP     flip
+            JMP     ESC
+
+ESC:
+            JSR     serin
+            CMPA    #$1B
+            BNE     FLIP
+            JMP     $E000
 
 QTRSCD:     LDA	#250		; 250 MILLISECONDS (FA HEX)
             JSR	DELAY
@@ -35,4 +45,4 @@ QTRSCD:     LDA	#250		; 250 MILLISECONDS (FA HEX)
 
 ; and done
 DONE:
-            JMP     $E000 
+            JMP     $E000
