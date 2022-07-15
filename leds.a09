@@ -1,0 +1,2 @@
+; leds
+LEDS        EQU     $9c00
